@@ -2,12 +2,9 @@ const express = require('express');
 const app = express();
 const clientesRoutes = require('./routes/clientesRoutes');
 const vendedoresRoutes = require('./routes/vendedoresRoutes');
-<<<<<<< HEAD
 const enderecoRoutes = require('./routes/enderecoRoutes');
 const produtoRoutes = require('./routes/produtoRoutes');
-=======
 const categoriasRoutes = require('./routes/categoriasRoutes');
->>>>>>> f9d71e628e226e099fe3f41d0b8b059aa9051edb
 
 app.use(express.json());
 
