@@ -4,7 +4,7 @@ const clientesRoutes = require('./routes/clientesRoutes');
 const vendedoresRoutes = require('./routes/vendedoresRoutes');
 const enderecoRoutes = require('./routes/enderecoRoutes');
 const produtoRoutes = require('./routes/produtoRoutes');
-const categoriasRoutes = require('./routes/categoriasRoutes');
+const categoriasRoutes = require('./routes/categoriaRoutes');
 
 app.use(express.json());
 
