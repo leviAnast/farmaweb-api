@@ -34,7 +34,7 @@ class ClientesService {
         email: data.email,
         senha: data.senha,
         telefone: data.telefone,
-        endereco_id: data.endereco_id ? Number(data.endereco_id) : undefined,
+        endereco_id: data.endereco_id ? { connect: { id: Number(data.endereco_id) } } : undefined,
       },
     });
   }
