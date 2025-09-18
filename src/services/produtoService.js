@@ -19,12 +19,15 @@ class ProdutoService {
       data: {
         nome: data.nome,
         descricao: data.descricao,
-        preco: data.preco,
-        qtd_estoque: data.qtd_estoque,
+        preco: Number(data.preco),
+        qtd_estoque: Number(data.qtd_estoque),
         prescricao: data.prescricao || false,
-        data_validade: data.data_validade,
-        categoria: { connect: { id: Number(data.categoria_id) } },
+        data_validade: data.data_validade ? new Date(data.data_validade) : null,
+        categoria: {
+          connect: { id: Number(data.categoria_id) },
+        },
       },
+      include: { categoria: true },
     });
   }
 
@@ -34,12 +37,15 @@ class ProdutoService {
       data: {
         nome: data.nome,
         descricao: data.descricao,
-        preco: data.preco,
-        qtd_estoque: data.qtd_estoque,
-        prescricao: data.prescricao,
-        data_validade: data.data_validade,
-        categoria_id: data.categoria_id ? Number(data.categoria_id) : undefined,
+        preco: data.preco ? Number(data.preco) : undefined,
+        qtd_estoque: data.qtd_estoque ? Number(data.qtd_estoque) : undefined,
+        prescricao: typeof data.prescricao === 'boolean' ? data.prescricao : undefined,
+        data_validade: data.data_validade ? new Date(data.data_validade) : undefined,
+        categoria: data.categoria_id
+          ? { connect: { id: Number(data.categoria_id) } }
+          : undefined,
       },
+      include: { categoria: true },
     });
   }
 

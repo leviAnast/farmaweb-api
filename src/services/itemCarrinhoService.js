@@ -4,25 +4,40 @@ class ItemCarrinhoService {
   async addItem(data) {
     return prisma.itemcarrinho.create({
       data: {
-        carrinho_id: Number(data.carrinho_id),
-        produto_id: Number(data.produto_id),
         quantidade: Number(data.quantidade),
         preco_unitario: Number(data.preco_unitario),
+        carrinho: { // relacionamento com carrinho
+          connect: { id: Number(data.carrinho_id) },
+        },
+        produto: { // relacionamento com produto
+          connect: { id: Number(data.produto_id) },
+        },
       },
+      include: { produto: true, carrinho: true },
     });
   }
 
   async getItemById(id) {
     return prisma.itemcarrinho.findUnique({
       where: { id: Number(id) },
-      include: { produto: true },
+      include: {
+        produto: true,
+        carrinho: true,
+      },
     });
   }
 
   async getItensByCarrinho(carrinho_id) {
     return prisma.itemcarrinho.findMany({
-      where: { carrinho_id: Number(carrinho_id) },
-      include: { produto: true },
+      where: {
+        carrinho: {
+          id: Number(carrinho_id),
+        },
+      },
+      include: {
+        produto: true,
+        carrinho: true,
+      },
     });
   }
 
@@ -32,7 +47,14 @@ class ItemCarrinhoService {
       data: {
         quantidade: data.quantidade ? Number(data.quantidade) : undefined,
         preco_unitario: data.preco_unitario ? Number(data.preco_unitario) : undefined,
+        produto: data.produto_id
+          ? { connect: { id: Number(data.produto_id) } }
+          : undefined,
+        carrinho: data.carrinho_id
+          ? { connect: { id: Number(data.carrinho_id) } }
+          : undefined,
       },
+      include: { produto: true, carrinho: true },
     });
   }
 

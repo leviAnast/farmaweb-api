@@ -4,25 +4,32 @@ class ItemPedidoService {
   async addItemPedido(data) {
     return prisma.itempedido.create({
       data: {
-        pedido_id: Number(data.pedido_id),
-        produto_id: Number(data.produto_id),
         quantidade: Number(data.quantidade),
         preco_unitario: Number(data.preco_unitario),
+        pedido: {
+          connect: { id: Number(data.pedido_id) },
+        },
+        produto: {
+          connect: { id: Number(data.produto_id) },
+        },
       },
+      include: { produto: true, pedido: true },
     });
   }
 
   async getItemPedidoById(id) {
     return prisma.itempedido.findUnique({
       where: { id: Number(id) },
-      include: { produto: true },
+      include: { produto: true, pedido: true },
     });
   }
 
   async getItensByPedido(pedido_id) {
     return prisma.itempedido.findMany({
-      where: { pedido_id: Number(pedido_id) },
-      include: { produto: true },
+      where: {
+        pedido: { id: Number(pedido_id) },
+      },
+      include: { produto: true, pedido: true },
     });
   }
 
@@ -32,7 +39,14 @@ class ItemPedidoService {
       data: {
         quantidade: data.quantidade ? Number(data.quantidade) : undefined,
         preco_unitario: data.preco_unitario ? Number(data.preco_unitario) : undefined,
+        pedido: data.pedido_id
+          ? { connect: { id: Number(data.pedido_id) } }
+          : undefined,
+        produto: data.produto_id
+          ? { connect: { id: Number(data.produto_id) } }
+          : undefined,
       },
+      include: { produto: true, pedido: true },
     });
   }
 

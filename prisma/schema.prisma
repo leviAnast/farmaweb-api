@@ -130,6 +130,7 @@ model vendedor {
   id            Int       @id @default(autoincrement())
   nome          String
   email         String
+  senha         String
   telefone      String?
   data_cadastro DateTime  @default(now())
 }
