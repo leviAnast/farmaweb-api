@@ -5,13 +5,14 @@ const vendedoresRoutes = require('./routes/vendedoresRoutes');
 const enderecoRoutes = require('./routes/enderecoRoutes');
 const produtoRoutes = require('./routes/produtoRoutes');
 const categoriasRoutes = require('./routes/categoriaRoutes');
-const favoritoRoutes = require('.routes/favoritoRoutes');
-const carrinhoRoutes = require('.routes/carrinhoRoutes');
-const itemCarrinhoRoutes = require('.routes/itemCarrinhoRoutes');
-const pedidoRoutes = require('.routes/pedidoRoutes');
-const pedidoCanceladoRoutes = require('.routes/pedidoCanceladoRoutes');
-const itemPedidoRoutes = require('.routes/itemPedidoRoutes');
-const pagamentoRoutes = require('.routes/pagamentoRoutes'); 
+const favoritoRoutes = require('./routes/favoritoRoutes');
+const carrinhoRoutes = require('./routes/carrinhoRoutes');
+const itemCarrinhoRoutes = require('./routes/itemCarrinhoRoutes');
+const pedidoRoutes = require('./routes/pedidoRoutes');
+const pedidoCanceladoRoutes = require('./routes/pedidoCanceladoRoutes');
+const itemPedidoRoutes = require('./routes/itemPedidoRoutes');
+const pagamentoRoutes = require('./routes/pagamentoRoutes'); 
+
 
 
 app.use(express.json());
