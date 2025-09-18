@@ -9,6 +9,7 @@ const favoritoRoutes = require('.routes/favoritoRoutes');
 const carrinhoRoutes = require('.routes/carrinhoRoutes');
 const itemCarrinhoRoutes = require('.routes/itemCarrinhoRoutes');
 const pedidoRoutes = require('.routes/pedidoRoutes');
+const pedidoCanceladoRoutes = require('.routes/pedidoCanceladoRoutes');
 const itemPedidoRoutes = require('.routes/itemPedidoRoutes');
 const pagamentoRoutes = require('.routes/pagamentoRoutes'); 
 
@@ -24,6 +25,7 @@ app.use('/favoritos', favoritoRoutes);
 app.use('/carrinhos', carrinhoRoutes);
 app.use('/itens-carrinho', itemCarrinhoRoutes);
 app.use('/pedidos', pedidoRoutes);
+app.use('/pedidos-cancelados', pedidoCanceladoRoutes);
 app.use('/itens-pedido', itemPedidoRoutes);
 app.use('/pagamentos', pagamentoRoutes);        
 
