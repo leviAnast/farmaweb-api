@@ -7,6 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model admin {
+  id                 Int        @id @default(autoincrement())
+  nome               String
+  email              String     @unique
+  senha              String
+  telefone           String?
+  data_cadastro      DateTime   @default(now())
+  hashedRefreshToken String?    // para JWT refresh
+  role               String     @default("admin")
+}
+
 model cliente {
   id           Int        @id @default(autoincrement())
   nome         String
@@ -18,8 +29,9 @@ model cliente {
   data_criacao DateTime   @default(now())
   pedidos      pedido[]
   favoritos    favorito[]
-
   carrinho carrinho[]
+  hashedRefreshToken String?    
+  role               String   @default("cliente")
 }
 
 model endereco {
@@ -133,4 +145,6 @@ model vendedor {
   senha         String
   telefone      String?
   data_cadastro DateTime  @default(now())
+  hashedRefreshToken String?    
+  role               String     @default("vendedor")
 }
