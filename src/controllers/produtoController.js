@@ -39,13 +39,14 @@ class ProdutoController {
   }
 
   async deleteProduto(req, res) {
-    try {
-      await produtoService.deleteProduto(req.params.id);
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+  try {
+    const deleted = await produtoService.deleteProduto(req.params.id);
+    if (!deleted) return res.status(404).json({ message: 'Produto não encontrado' });
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+}
 }
 
 module.exports = new ProdutoController();

@@ -24,6 +24,13 @@ class ItemCarrinhoController {
     res.json(item);
   }
 
+  async diminuirItem(req, res) {
+    const { id } = req.params;
+    const item = await itemCarrinhoService.diminuirQuantidade(id);
+    if (!item) return res.status(404).json({ message: "Item não encontrado" });
+    res.json(item);
+  }
+
   async deleteItem(req, res) {
     const { id } = req.params;
     await itemCarrinhoService.deleteItem(id);

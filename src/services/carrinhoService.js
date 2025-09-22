@@ -5,7 +5,7 @@ class CarrinhoService {
     return prisma.carrinho.create({
       data: {
         data_criacao: data.data_criacao || new Date(),
-        cliente: {   
+        usuario: {
           connect: { id: Number(data.usuario_id) },
         },
       },
@@ -21,23 +21,19 @@ class CarrinhoService {
             produto: true, 
           },
         },
-        cliente: true, 
+        usuario: true,
       },
     });
   }
 
   async getCarrinhosByUsuario(usuario_id) {
     return prisma.carrinho.findMany({
-      where: {
-        cliente: {
-          id: Number(usuario_id), 
-        },
-      },
+      where: { usuario_id: Number(usuario_id) },
       include: {
         itenscarrinho: {
           include: { produto: true },
         },
-        cliente: true,
+        usuario: true,
       },
     });
   }
