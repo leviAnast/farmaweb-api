@@ -2,16 +2,33 @@ const prisma = require('../config/prismaClient.js');
 
 class ItemCarrinhoService {
   async addItem(data) {
+    const existente = await prisma.itemcarrinho.findFirst({
+      where: {
+        carrinho_id: Number(data.carrinho_id),
+        produto_id: Number(data.produto_id),
+      },
+    });
+
+    if (existente) {
+      return prisma.itemcarrinho.update({
+        where: { id: existente.id },
+        data: {
+          quantidade: existente.quantidade + Number(data.quantidade || 1),
+        },
+        include: { produto: true, carrinho: true },
+      });
+    }
+
+    const produto = await prisma.produto.findUnique({
+      where: { id: Number(data.produto_id) },
+    });
+
     return prisma.itemcarrinho.create({
       data: {
-        quantidade: Number(data.quantidade),
-        preco_unitario: Number(data.preco_unitario),
-        carrinho: { // relacionamento com carrinho
-          connect: { id: Number(data.carrinho_id) },
-        },
-        produto: { // relacionamento com produto
-          connect: { id: Number(data.produto_id) },
-        },
+        quantidade: Number(data.quantidade) || 1,
+        preco_unitario: Number(produto.preco),
+        carrinho: { connect: { id: Number(data.carrinho_id) } },
+        produto: { connect: { id: Number(data.produto_id) } },
       },
       include: { produto: true, carrinho: true },
     });
@@ -20,24 +37,14 @@ class ItemCarrinhoService {
   async getItemById(id) {
     return prisma.itemcarrinho.findUnique({
       where: { id: Number(id) },
-      include: {
-        produto: true,
-        carrinho: true,
-      },
+      include: { produto: true, carrinho: true },
     });
   }
 
   async getItensByCarrinho(carrinho_id) {
     return prisma.itemcarrinho.findMany({
-      where: {
-        carrinho: {
-          id: Number(carrinho_id),
-        },
-      },
-      include: {
-        produto: true,
-        carrinho: true,
-      },
+      where: { carrinho_id: Number(carrinho_id) },
+      include: { produto: true, carrinho: true },
     });
   }
 
@@ -56,6 +63,21 @@ class ItemCarrinhoService {
       },
       include: { produto: true, carrinho: true },
     });
+  }
+
+  async diminuirQuantidade(id) {
+    const item = await prisma.itemcarrinho.findUnique({ where: { id: Number(id) } });
+    if (!item) return null;
+
+    if (item.quantidade > 1) {
+      return prisma.itemcarrinho.update({
+        where: { id: Number(id) },
+        data: { quantidade: item.quantidade - 1 },
+        include: { produto: true, carrinho: true },
+      });
+    } else {
+      return prisma.itemcarrinho.delete({ where: { id: Number(id) } });
+    }
   }
 
   async deleteItem(id) {

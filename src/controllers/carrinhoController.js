@@ -23,6 +23,12 @@ class CarrinhoController {
     await carrinhoService.deleteCarrinho(id);
     res.status(204).send();
   }
+
+  async finalizarCarrinho(req, res) {
+    const { id } = req.params;
+    const carrinho = await carrinhoService.finalizarCarrinho(id);
+    res.json(carrinho);
+  }
 }
 
 module.exports = new CarrinhoController();

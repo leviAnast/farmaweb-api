@@ -60,6 +60,16 @@ model produto {
   itenscarrinho itemcarrinho[]
   itenspedido   itempedido[]
   favoritos     favorito[]
+
+  imagemPrincipal String?
+  imagensGaleria  imagem[]
+}
+
+model imagem {
+  id         Int      @id @default(autoincrement())
+  url        String   // pode ser o caminho no servidor ou na nuvem (S3, Cloudinary, etc.)
+  produto_id Int
+  produto    produto  @relation(fields: [produto_id], references: [id])
 }
 
 model categoria {
