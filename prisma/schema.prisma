@@ -151,7 +151,7 @@ model pedidocancelado {
 model vendedor {
   id            Int       @id @default(autoincrement())
   nome          String
-  email         String
+  email         String    @unique
   senha         String
   telefone      String?
   data_cadastro DateTime  @default(now())
