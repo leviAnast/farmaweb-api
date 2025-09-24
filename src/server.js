@@ -18,6 +18,7 @@ const pedidoCanceladoRoutes = require('./routes/pedidoCanceladoRoutes');
 const itemPedidoRoutes = require('./routes/itemPedidoRoutes');
 const pagamentoRoutes = require('./routes/pagamentoRoutes');
 const authRoutes = require('./auth/authRoutes');
+const cartaoRoutes = require('./routes/cartaoRoutes');
 
 app.use('/clientes', clientesRoutes);
 app.use('/vendedores', vendedoresRoutes);
@@ -32,6 +33,7 @@ app.use('/pedidos-cancelados', pedidoCanceladoRoutes);
 app.use('/itens-pedido', itemPedidoRoutes);
 app.use('/pagamentos', pagamentoRoutes);
 app.use('/auth', authRoutes);
+app.use('cartao', cartaoRoutes);
 
 app.get("/", (req, res) => {
   res.send("FarmaWeb funcionando");
