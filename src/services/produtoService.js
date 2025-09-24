@@ -27,7 +27,7 @@ class ProdutoService {
         categoria: {
           connect: { id: Number(data.categoria_id) },
         },
-        imagensGaleria: data.imagensGaleria
+        imagensGaleria: Array.isArray(data.imagensGaleria) && data.imagensGaleria.length > 0
           ? {
               create: data.imagensGaleria.map((url) => ({ url })),
             }
@@ -51,9 +51,9 @@ class ProdutoService {
         categoria: data.categoria_id
           ? { connect: { id: Number(data.categoria_id) } }
           : undefined,
-        imagensGaleria: data.imagensGaleria
+        imagensGaleria: Array.isArray(data.imagensGaleria)
           ? {
-              deleteMany: {}, 
+              deleteMany: {},
               create: data.imagensGaleria.map((url) => ({ url })),
             }
           : undefined,

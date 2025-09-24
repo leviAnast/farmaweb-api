@@ -29,10 +29,12 @@ model cliente {
   data_criacao DateTime   @default(now())
   pedidos      pedido[]
   favoritos    favorito[]
-  carrinho carrinho[]
-  hashedRefreshToken String?    
-  role               String   @default("cliente")
+  carrinho     carrinho[]
+
+  hashedRefreshToken String?
+  role               String     @default("cliente")
 }
+
 
 model endereco {
   id          Int        @id @default(autoincrement())
@@ -67,7 +69,7 @@ model produto {
 
 model imagem {
   id         Int      @id @default(autoincrement())
-  url        String   // pode ser o caminho no servidor ou na nuvem (S3, Cloudinary, etc.)
+  url        String 
   produto_id Int
   produto    produto  @relation(fields: [produto_id], references: [id])
 }
