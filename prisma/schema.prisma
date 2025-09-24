@@ -8,34 +8,35 @@ datasource db {
 }
 
 model admin {
-  id                 Int        @id @default(autoincrement())
+  id                 Int      @id @default(autoincrement())
   nome               String
-  email              String     @unique
+  email              String   @unique
   senha              String
   telefone           String?
-  data_cadastro      DateTime   @default(now())
-  hashedRefreshToken String?    // para JWT refresh
-  role               String     @default("admin")
+  data_cadastro      DateTime @default(now())
+  hashedRefreshToken String?
+  role               String   @default("admin")
 }
 
 model cliente {
-  id           Int        @id @default(autoincrement())
-  nome         String
-  email        String     @unique
-  senha        String
-  telefone     String?
-  endereco_id  Int
-  endereco     endereco   @relation(fields: [endereco_id], references: [id])
-  data_criacao DateTime   @default(now())
-  pedidos      pedido[]
-  favoritos    favorito[]
-  carrinho carrinho[]
-  hashedRefreshToken String?    
-  role               String   @default("cliente")
+  id                 Int                 @id @default(autoincrement())
+  nome               String
+  email              String              @unique
+  senha              String
+  telefone           String?
+  endereco_id        Int
+  endereco           endereco            @relation(fields: [endereco_id], references: [id])
+  data_criacao       DateTime            @default(now())
+  pedidos            pedido[]
+  favoritos          favorito[]
+  carrinho           carrinho[]
+  hashedRefreshToken String?
+  role               String              @default("cliente")
+  cartao_de_credito  cartao_de_credito[]
 }
 
 model endereco {
-  id          Int        @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   rua         String
   numero      String
   complemento String?
@@ -44,19 +45,19 @@ model endereco {
   estado      String
   cep         String
   clientes    cliente[]
-  pedidos     pedido[]   @relation("enderecoentrega")
+  pedidos     pedido[]  @relation("enderecoentrega")
 }
 
 model produto {
-  id            Int          @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   nome          String
   descricao     String?
   preco         Float
   qtd_estoque   Int
   categoria_id  Int
-  categoria     categoria    @relation(fields: [categoria_id], references: [id])
+  categoria     categoria      @relation(fields: [categoria_id], references: [id])
   data_validade DateTime?
-  prescricao    Boolean      @default(false)
+  prescricao    Boolean        @default(false)
   itenscarrinho itemcarrinho[]
   itenspedido   itempedido[]
   favoritos     favorito[]
@@ -66,10 +67,10 @@ model produto {
 }
 
 model imagem {
-  id         Int      @id @default(autoincrement())
-  url        String   // pode ser o caminho no servidor ou na nuvem (S3, Cloudinary, etc.)
+  id         Int     @id @default(autoincrement())
+  url        String
   produto_id Int
-  produto    produto  @relation(fields: [produto_id], references: [id])
+  produto    produto @relation(fields: [produto_id], references: [id])
 }
 
 model categoria {
@@ -79,82 +80,92 @@ model categoria {
 }
 
 model carrinho {
-  id            Int           @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   usuario_id    Int
-  usuario       cliente       @relation(fields: [usuario_id], references: [id])
-  data_criacao  DateTime      @default(now())
+  usuario       cliente        @relation(fields: [usuario_id], references: [id])
+  data_criacao  DateTime       @default(now())
   itenscarrinho itemcarrinho[]
 }
 
 model itemcarrinho {
-  id             Int       @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   carrinho_id    Int
   produto_id     Int
   quantidade     Int
   preco_unitario Float
-  carrinho       carrinho  @relation(fields: [carrinho_id], references: [id])
-  produto        produto   @relation(fields: [produto_id], references: [id])
+  carrinho       carrinho @relation(fields: [carrinho_id], references: [id])
+  produto        produto  @relation(fields: [produto_id], references: [id])
 }
 
 model pedido {
-  id                  Int             @id @default(autoincrement())
+  id                  Int              @id @default(autoincrement())
   usuario_id          Int
   endereco_entrega_id Int
   status              String
   total               Float
-  data_pedido         DateTime        @default(now())
+  data_pedido         DateTime         @default(now())
   forma_pagamento     String
-  usuario             cliente        @relation(fields: [usuario_id], references: [id])
-  endereco            endereco       @relation("enderecoentrega", fields: [endereco_entrega_id], references: [id])
+  usuario             cliente          @relation(fields: [usuario_id], references: [id])
+  endereco            endereco         @relation("enderecoentrega", fields: [endereco_entrega_id], references: [id])
   itenspedido         itempedido[]
   pagamentos          pagamento[]
   cancelamento        pedidocancelado?
 }
 
 model itempedido {
-  id             Int       @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   pedido_id      Int
   produto_id     Int
   quantidade     Int
   preco_unitario Float
-  pedido         pedido    @relation(fields: [pedido_id], references: [id])
-  produto        produto   @relation(fields: [produto_id], references: [id])
+  pedido         pedido  @relation(fields: [pedido_id], references: [id])
+  produto        produto @relation(fields: [produto_id], references: [id])
 }
 
 model pagamento {
-  id             Int       @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   pedido_id      Int
   metodo         String
   status         String
   valor          Float
   data_pagamento DateTime
-  pedido         pedido    @relation(fields: [pedido_id], references: [id])
+  pedido         pedido   @relation(fields: [pedido_id], references: [id])
 }
 
 model favorito {
-  id              Int       @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   usuario_id      Int
   produto_id      Int
-  data_adicionado DateTime  @default(now())
-  usuario         cliente   @relation(fields: [usuario_id], references: [id])
-  produto         produto   @relation(fields: [produto_id], references: [id])
+  data_adicionado DateTime @default(now())
+  usuario         cliente  @relation(fields: [usuario_id], references: [id])
+  produto         produto  @relation(fields: [produto_id], references: [id])
 }
 
 model pedidocancelado {
-  id                Int       @id @default(autoincrement())
-  pedido_id         Int @unique
+  id                Int      @id @default(autoincrement())
+  pedido_id         Int      @unique
   motivo            String
-  data_cancelamento DateTime  @default(now())
-  pedido            pedido    @relation(fields: [pedido_id], references: [id])
+  data_cancelamento DateTime @default(now())
+  pedido            pedido   @relation(fields: [pedido_id], references: [id])
 }
 
 model vendedor {
-  id            Int       @id @default(autoincrement())
-  nome          String
-  email         String    @unique
-  senha         String
-  telefone      String?
-  data_cadastro DateTime  @default(now())
-  hashedRefreshToken String?    
-  role               String     @default("vendedor")
+  id                 Int      @id @default(autoincrement())
+  nome               String
+  email              String   @unique
+  senha              String
+  telefone           String?
+  data_cadastro      DateTime @default(now())
+  hashedRefreshToken String?
+  role               String   @default("vendedor")
+}
+
+model cartao_de_credito {
+  id          Int     @id @default(autoincrement())
+  nome_cartao String
+  vencimento  String
+  numero      String
+  cvv         String
+  cliente     cliente @relation(fields: [cliente_id], references: [id])
+  cliente_id  Int
 }
