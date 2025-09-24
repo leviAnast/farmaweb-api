@@ -1,4 +1,3 @@
-const { id } = require('zod/locales');
 const prisma = require('../config/prismaClient.js');
 
 class ItemPedidoService {

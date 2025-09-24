@@ -1,4 +1,4 @@
-const authService = require('../auth/authService');
+const authService = require('./authService');
 
 class AuthController {
   async cadastroCliente(req, res) {
@@ -6,7 +6,8 @@ class AuthController {
       const result = await authService.cadastroCliente(req.body);
       res.json(result);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      const status = err.code === 'P2002' ? 409 : 400;
+      res.status(status).json({ error: err.message });
     }
   }
 
@@ -15,7 +16,8 @@ class AuthController {
       const result = await authService.cadastroVendedor(req.body, req.user);
       res.json(result);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      const status = err.code === 'P2002' ? 409 : 400;
+      res.status(status).json({ error: err.message });
     }
   }
 
@@ -43,7 +45,7 @@ class AuthController {
       const result = await authService.getNewTokens(userId, refreshToken, role);
       res.json(result);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(401).json({ error: err.message });
     }
   }
 }

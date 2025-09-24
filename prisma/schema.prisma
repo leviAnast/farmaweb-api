@@ -35,6 +35,7 @@ model cliente {
   cartao_de_credito  cartao_de_credito[]
 }
 
+
 model endereco {
   id          Int       @id @default(autoincrement())
   rua         String
@@ -169,3 +170,4 @@ model cartao_de_credito {
   cliente     cliente @relation(fields: [cliente_id], references: [id])
   cliente_id  Int
 }
+  
