@@ -2,15 +2,19 @@ const prisma = require('../config/prismaClient.js');
 
 class CartaoService {
   async createCartao(data) {
+    const { nome_cartao, vencimento, numero, cvv, cliente_id } = data;
+
+    if (!nome_cartao || !vencimento || !numero || !cvv || !cliente_id) {
+      throw new Error("Todos os campos são obrigatórios.");
+    }
+
     return prisma.cartao_de_credito.create({
       data: {
-        nome_cartao: data.nome_cartao,
-        vencimento: data.vencimento,
-        numero: data.numero,
-        cvv: data.cvv,
-        cliente: {
-          connect: { id: Number(data.cliente_id) },
-        },
+        nome_cartao,
+        vencimento,
+        numero,
+        cvv,
+        cliente_id: Number(cliente_id),
       },
     });
   }
@@ -30,13 +34,15 @@ class CartaoService {
   }
 
   async updateCartao(id, data) {
+    const { nome_cartao, vencimento, numero, cvv } = data;
+
     return prisma.cartao_de_credito.update({
       where: { id: Number(id) },
       data: {
-        nome_cartao: data.nome_cartao,
-        vencimento: data.vencimento,
-        numero: data.numero,
-        cvv: data.cvv,
+        nome_cartao,
+        vencimento,
+        numero,
+        cvv,
       },
     });
   }

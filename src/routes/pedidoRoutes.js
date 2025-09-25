@@ -6,6 +6,7 @@ router.post('/', pedidoController.createPedido);
 router.get('/:id', pedidoController.getPedidoById);
 router.get('/usuario/:usuario_id', pedidoController.getPedidosByUsuario);
 router.put('/:id', pedidoController.updatePedido);
+router.put('/:id/cancelar', pedidoController.cancelarPedido); // <- nova rota
 router.delete('/:id', pedidoController.deletePedido);
 
 module.exports = router;

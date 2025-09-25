@@ -7,7 +7,7 @@ class PagamentoService {
         metodo: data.metodo,
         status: data.status,
         valor: Number(data.valor),
-        data_pagamento: data.data_pagamento || new Date(),
+        data_pagamento: new Date(),
         pedido: { connect: { id: Number(data.pedido_id) } },
       },
     });
@@ -34,15 +34,12 @@ class PagamentoService {
         metodo: data.metodo,
         status: data.status,
         valor: data.valor ? Number(data.valor) : undefined,
-        data_pagamento: data.data_pagamento || undefined,
       },
     });
   }
 
   async deletePagamento(id) {
-    return prisma.pagamento.delete({
-      where: { id: Number(id) },
-    });
+    return prisma.pagamento.delete({ where: { id: Number(id) } });
   }
 }
 

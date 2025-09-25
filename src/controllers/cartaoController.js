@@ -2,32 +2,53 @@ const cartaoService = require('../services/cartaoService');
 
 class CartaoController {
   async createCartao(req, res) {
-    const cartao = await cartaoCredito.createCartao(req.body);
-    res.status(201).json(cartao);
+    try {
+      const cartao = await cartaoService.createCartao(req.body);
+      res.status(201).json(cartao);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
   }
 
   async getCartaoById(req, res) {
-    const { id } = req.params;
-    const cartao = await cartaoCredito.getCartaoById(id);
-    res.json(cartao);
+    try {
+      const { id } = req.params;
+      const cartao = await cartaoService.getCartaoById(id);
+      if (!cartao) return res.status(404).json({ message: "Cartão não encontrado" });
+      res.json(cartao);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
   }
 
   async getCartoesByCliente(req, res) {
-    const { cliente_id } = req.params;
-    const cartoes = await cartaoCredito.getCartoesByCliente(cliente_id);
-    res.json(cartoes);
+    try {
+      const { id } = req.params;
+      const cartoes = await cartaoService.getCartoesByCliente(id);
+      res.json(cartoes);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
   }
 
   async updateCartao(req, res) {
-    const { id } = req.params;
-    const cartao = await cartaoCredito.updateCartao(id, req.body);
-    res.json(cartao);
+    try {
+      const { id } = req.params;
+      const cartao = await cartaoService.updateCartao(id, req.body);
+      res.json(cartao);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
   }
 
   async deleteCartao(req, res) {
-    const { id } = req.params;
-    await cartaoCredito.deleteCartao(id);
-    res.status(204).send();
+    try {
+      const { id } = req.params;
+      await cartaoService.deleteCartao(id);
+      res.status(204).send();
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
   }
 }
 

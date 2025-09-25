@@ -1,42 +1,120 @@
 const prisma = require('../config/prismaClient.js');
 
 class PedidoCanceladoService {
-  async createPedidoCancelado(data) {
-    return prisma.pedidocancelado.create({
+  async criarPedidoCancelado(data) {
+    return prisma.pedidoCancelado.create({
       data: {
         motivo: data.motivo,
-        data_cancelamento: data.data_cancelamento || new Date(),
-        pedido: { connect: { id: Number(data.pedido_id) } }, 
+        data_cancelamento: new Date(),
+        pedido: { connect: { id: Number(data.pedido_id) } },
+      },
+      include: {
+        pedido: {
+          include: {
+            itenspedido: {
+              include: {
+                produto: {
+                  select: {
+                    id: true,
+                    nome: true,
+                    preco: true,
+                    imagemPrincipal: true,
+                  },
+                },
+              },
+            },
+            usuario: true,
+            endereco: true,
+          },
+        },
       },
     });
   }
 
   async getPedidoCanceladoById(id) {
-    return prisma.pedidocancelado.findUnique({
+    return prisma.pedidoCancelado.findUnique({
       where: { id: Number(id) },
-      include: { pedido: true },
-    });
-  }
-
-  async getPedidoCanceladoByPedido(pedido_id) {
-    return prisma.pedidocancelado.findUnique({
-      where: { pedido_id: Number(pedido_id) },
-      include: { pedido: true },
-    });
-  }
-
-  async updatePedidoCancelado(id, data) {
-    return prisma.pedidocancelado.update({
-      where: { id: Number(id) },
-      data: {
-        motivo: data.motivo,
-        data_cancelamento: data.data_cancelamento || undefined,
+      include: {
+        pedido: {
+          include: {
+            itenspedido: {
+              include: {
+                produto: {
+                  select: {
+                    id: true,
+                    nome: true,
+                    preco: true,
+                    imagemPrincipal: true,
+                  },
+                },
+              },
+            },
+            usuario: true,
+            endereco: true,
+          },
+        },
       },
     });
   }
 
-  async deletePedidoCancelado(id) {
-    return prisma.pedidocancelado.delete({
+  async getPedidoCanceladoByPedido(pedidoId) {
+    return prisma.pedidoCancelado.findMany({
+      where: { pedido_id: Number(pedidoId) },
+      include: {
+        pedido: {
+          include: {
+            itenspedido: {
+              include: {
+                produto: {
+                  select: {
+                    id: true,
+                    nome: true,
+                    preco: true,
+                    imagemPrincipal: true,
+                  },
+                },
+              },
+            },
+            usuario: true,
+            endereco: true,
+          },
+        },
+      },
+      orderBy: { data_cancelamento: "desc" },
+    });
+  }
+
+  async atualizarPedidoCancelado(id, data) {
+    return prisma.pedidoCancelado.update({
+      where: { id: Number(id) },
+      data: {
+        motivo: data.motivo,
+      },
+      include: {
+        pedido: {
+          include: {
+            itenspedido: {
+              include: {
+                produto: {
+                  select: {
+                    id: true,
+                    nome: true,
+                    preco: true,
+                    imagemPrincipal: true,
+                  },
+                },
+              },
+            },
+            usuario: true,
+            endereco: true,
+          },
+        },
+      },
+    });
+  }
+
+  async deletarPedidoCancelado(id) {
+    return prisma.pedidoCancelado.delete({
       where: { id: Number(id) },
     });
   }

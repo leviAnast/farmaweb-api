@@ -99,16 +99,23 @@ class AuthService {
     }
   }
 
-  async login({ email, password, role }) {
-    if (!email || !password || !role) {
-      throw new Error('Informe email, password e role');
+  async login({ email, password }) {
+    if (!email || !password) {
+      throw new Error('Informe email e password');
     }
 
-    let user;
-    if (role === 'cliente') user = await prisma.cliente.findUnique({ where: { email } });
-    else if (role === 'vendedor') user = await prisma.vendedor.findUnique({ where: { email } });
-    else if (role === 'admin') user = await prisma.admin.findUnique({ where: { email } });
-    else throw new Error('Role inválida');
+    let user = await prisma.cliente.findUnique({ where: { email } });
+    let role = 'cliente';
+
+    if (!user) {
+      user = await prisma.vendedor.findUnique({ where: { email } });
+      if (user) role = 'vendedor';
+    }
+
+    if (!user) {
+      user = await prisma.admin.findUnique({ where: { email } });
+      if (user) role = 'admin';
+    }
 
     if (!user) throw new Error('Email ou senha inválidos');
 

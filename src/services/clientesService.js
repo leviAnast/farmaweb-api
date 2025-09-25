@@ -21,8 +21,19 @@ class ClientesService {
         email: data.email,
         senha: data.senha,
         telefone: data.telefone,
-        endereco: { connect: { id: Number(data.endereco_id) } },
+        endereco: {
+          create: {
+            rua: data.rua,
+            numero: data.numero,
+            bairro: data.bairro,
+            cidade: data.cidade,
+            estado: data.estado,
+            cep: data.cep,
+            complemento: data.complemento || null,
+          },
+        },
       },
+      include: { endereco: true },
     });
   }
 
@@ -34,8 +45,21 @@ class ClientesService {
         email: data.email,
         senha: data.senha,
         telefone: data.telefone,
-        endereco_id: data.endereco_id ? { connect: { id: Number(data.endereco_id) } } : undefined,
+        endereco: data.endereco
+          ? {
+              update: {
+                rua: data.endereco.rua,
+                numero: data.endereco.numero,
+                bairro: data.endereco.bairro,
+                cidade: data.endereco.cidade,
+                estado: data.endereco.estado,
+                cep: data.endereco.cep,
+                complemento: data.endereco.complemento || null,
+              },
+            }
+          : undefined,
       },
+      include: { endereco: true },
     });
   }
 
