@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 async function main() {
   const adminPassword = await argon.hash("admin123");
 
-  // Admin
   await prisma.admin.upsert({
     where: { email: "admin@farmaweb.com" },
     update: {},
@@ -17,7 +16,6 @@ async function main() {
     },
   });
 
-  // Reset das categorias para garantir IDs fixos
   await prisma.produto.deleteMany();
   await prisma.categoria.deleteMany();
 
@@ -35,7 +33,6 @@ async function main() {
     await prisma.categoria.create({ data: { id: cat.id, nome: cat.nome } });
   }
 
-  // Produtos exemplo
   await prisma.produto.create({
     data: {
       nome: "Dipirona 500mg",
@@ -78,7 +75,7 @@ async function main() {
     },
   });
 
-  console.log("✅ Seed concluído: admin, categorias fixas e produtos exemplo criados.");
+  console.log("Seed concluído");
 }
 
 main()

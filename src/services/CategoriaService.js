@@ -32,7 +32,6 @@ class CategoriasService {
       });
     } catch (error) {
       if (error.code === 'P2025') {
-        // Prisma error: record not found
         return null;
       }
       throw error;
